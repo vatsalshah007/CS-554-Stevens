@@ -4,13 +4,16 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js"
   },
   "author": "Vatsal Shah 10474245",
   "license": "MIT",
   "dependencies": {
+    "bcrypt": "^5.0.1",
     "express": "^4.17.2",
     "express-session": "^1.17.2",
-    "mongodb": "^4.3.1"
+    "mongodb": "^4.3.1",
+    "xss": "^1.0.10"
   }
 }
