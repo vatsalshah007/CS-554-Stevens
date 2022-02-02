@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node app.js"
   },
-  "author": "Shah_Vatsal_10474245",
+  "author": "Vatsal Shah 10474245",
   "license": "MIT",
   "dependencies": {
     "axios": "^0.25.0",
