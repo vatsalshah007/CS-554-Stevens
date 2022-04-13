@@ -10,6 +10,7 @@ const GET_UNSPLASH_IMAGES = gql`
             description
             userPosted
             binned
+            numBinned
         }
     }
 `;
@@ -23,6 +24,7 @@ const GET_BINNED_IMAGES = gql`
             description
             userPosted
             binned
+            numBinned
         }
     }
 `;
@@ -36,6 +38,7 @@ const GET_MY_POSTS = gql`
             description
             userPosted
             binned
+            numBinned
         }
     }
 `;
@@ -49,19 +52,21 @@ const UPLOAD_IMAGE = gql`
             description
             userPosted
             binned
+            numBinned
         }
     }
 `; 
 
 const UPDATE_IMAGE = gql`
-    mutation Mutataion2($id: ID!, $url: String, $posterName: String, $description: String, $userPosted: Boolean, $binned: Boolean) {
-        updateImage(id: $id, url: $url, posterName: $posterName, description: $description, userPosted: $userPosted, binned: $binned) {
+    mutation Mutataion2($id: ID!, $url: String, $posterName: String, $description: String, $userPosted: Boolean, $binned: Boolean, $numBinned: Int) {
+        updateImage(id: $id, url: $url, posterName: $posterName, description: $description, userPosted: $userPosted, binned: $binned, numBinned: $numBinned) {
             id
             url
             posterName
             description
             userPosted
             binned
+            numBinned
         }
     }
 `;
@@ -75,6 +80,22 @@ const DELETE_IMAGE = gql`
             description
             userPosted
             binned
+            numBinned
+        }
+    }
+`;
+
+
+const GET_TOP_BINNED = gql`
+    query Query4{
+        getTopTenBinnedPosts {
+            id
+            url
+            posterName
+            description
+            userPosted
+            binned
+            numBinned
         }
     }
 `;
@@ -85,7 +106,8 @@ const queries = {
     GET_MY_POSTS,
     UPLOAD_IMAGE,
     UPDATE_IMAGE,
-    DELETE_IMAGE
+    DELETE_IMAGE,
+    GET_TOP_BINNED
 }
 
 export default queries

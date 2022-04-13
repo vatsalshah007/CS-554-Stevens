@@ -42,7 +42,7 @@ const useStyles = makeStyles({
 
 const ImageList = (props) => {
     const classes = useStyles();
-    const [binUnbinIamge, {data, loading, error}] = useMutation(queries.UPDATE_IMAGE,{onCompleted: props.refetch});
+    const [binUnbinIamge, {data, loading, error}] = useMutation(queries.UPDATE_IMAGE, {onCompleted: props.refetch});
     const [delImage] = useMutation(queries.DELETE_IMAGE, {onCompleted: props.refetch});
     let card
 
@@ -59,7 +59,8 @@ const ImageList = (props) => {
                             description: x.description,
                             posterName: x.posterName,
                             userPosted: x.userPosted,
-                            binned: x.binned
+                            binned: x.binned,
+                            numBinned: x.numBinned
                         }
                     })
                 }} 
@@ -79,7 +80,8 @@ const ImageList = (props) => {
                             description: x.description,
                             posterName: x.posterName,
                             userPosted: x.userPosted,
-                            binned: x.binned
+                            binned: x.binned,
+                            numBinned: x.numBinned
                         }
                     })
                     // setBinImage(true)
@@ -165,18 +167,25 @@ const ImageList = (props) => {
             return imageGrid(x)
         })
     } else if (props.data.binnedImages) {
-        if(props.data.binnedImages.length == 0) {
+        if(props.data.binnedImages.length === 0) {
             return <div>Please Bin some images to see them here.</div>
         }
         card = props.data.binnedImages.map( x => {
             return imageGrid(x)
         })
     } else if(props.data.userPostedImages){
-        if(props.data.userPostedImages.length == 0) {
+        if(props.data.userPostedImages.length === 0) {
             return <div>Please post some images to see them here.</div>
         }
         card = props.data.userPostedImages.map( x => {
             return myImageGrid(x)
+        })
+    } else if(props.data.getTopTenBinnedPosts){
+        if(props.data.getTopTenBinnedPosts.length === 0) {
+            return <div>Please post some images to see them here.</div>
+        }
+        card = props.data.getTopTenBinnedPosts.map( x => {
+            return imageGrid(x)
         })
     }
 	

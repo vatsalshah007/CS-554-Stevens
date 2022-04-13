@@ -26,7 +26,8 @@ const typeDefs = gql`
     type Query {
         unsplashImages(pageNum: Int): [ImagePost]
         binnedImages: [ImagePost]
-        userPostedImages: [ImagePost]   
+        userPostedImages: [ImagePost] 
+        getTopTenBinnedPosts: [ImagePost]  
     }
 
     # All the types
@@ -37,12 +38,13 @@ const typeDefs = gql`
         description: String
         userPosted: Boolean!
         binned: Boolean!
+        numBinned: Int!
     }
 
     # All the mutations
     type Mutation{
         uploadImage(url: String!, description: String, posterName: String): ImagePost
-        updateImage(id: ID!, url: String, posterName: String, description: String, userPosted: Boolean, binned: Boolean): ImagePost
+        updateImage(id: ID!, url: String, posterName: String, description: String, userPosted: Boolean, binned: Boolean, numBinned: Int): ImagePost
         deleteImage(id: ID!): ImagePost
     }
 `;
@@ -73,7 +75,7 @@ const resolvers = {
                     description: x.description ? x.description : `No Description`,
                     userPosted: false,
                     binned: bool,
-                    // numBinned: x.likes
+                    numBinned: x.likes
                 }
             })
             // console.log(images);            
@@ -99,22 +101,34 @@ const resolvers = {
                 usersImages.push(JSON.parse(image))
             }
             return usersImages
+        },
+        getTopTenBinnedPosts: async () => {
+            const binList = await redisClient.lRange("myBinList", 0, 500)
+            // console.log(binList);
+            if (binList) {
+                for(i in binList) {
+                    // console.log(i);
+                    let mydata = await redisClient.hGet("myBin", binList[i])
+                    await redisClient.zAdd("topTenBinnedImages", {
+                        score: JSON.parse(mydata).numBinned,
+                        value: mydata,
+                    }); 
+                }  
+            }
+            const topBinnedImagesAsc = await redisClient.zRange("topTenBinnedImages", 0, -1, {                                                                                 
+                                            REV: true
+            });
+            console.log(topBinnedImagesAsc);
+            const topTenBinned = []
+            for(i in topBinnedImagesAsc){
+                if (topTenBinned.length == 10) {
+                    break
+                } else {
+                    topTenBinned.push(JSON.parse(topBinnedImagesAsc[i]))
+                }
+            }
+            return topTenBinned
         }
-        // getTopTenBinnedPosts: async () => {
-        //     const binList = await redisClient.lRange("myBinList", 0, 500)
-        //     if (binList) {
-        //         const topBinnedImages = []
-        //         JSON.parse(binList).forEach(async x => {
-        //             console.log(x);
-        //             let mydata = JSON.stringify(x)
-        //             await redisClient.zAdd("topTenBinnedImages", {
-        //                 score: x.numBinned,
-        //                 value: mydata,
-        //             }); 
-        //         })
-                
-        //     }
-        // }
     },
     Mutation: {
         uploadImage: async (_, args) => {
@@ -130,7 +144,7 @@ const resolvers = {
                     description: description,
                     userPosted: true,
                     binned: false,
-                    // numBinned: 0
+                    numBinned: 0
                 }
                 await redisClient.hSet("userPostedImages", id, JSON.stringify(newImage))
                 await redisClient.lPush("listUserPostedImages", id)   
@@ -151,7 +165,7 @@ const resolvers = {
                         description: args.description,
                         userPosted: args.userPosted,
                         binned: false,
-                        // numBinned: args.numBinned
+                        numBinned: args.numBinned
                     }
                     await redisClient.hDel("myBin", args.id)
                     await redisClient.lRem("myBinList", 0, args.id)
@@ -167,7 +181,7 @@ const resolvers = {
                         description: args.description,
                         userPosted: args.userPosted,
                         binned: true,
-                        // numBinned: args.numBinned
+                        numBinned: args.numBinned
                     }
                     await redisClient.hSet("myBin", args.id, JSON.stringify(updatedImage))
                     await redisClient.lPush("myBinList", args.id)

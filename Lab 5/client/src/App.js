@@ -5,6 +5,7 @@ import Images from './components/Images';
 import MyPost from './components/MyPosts';
 import BinnedImages from './components/BinnedImages';
 import UploadImage from './components/UploadImage';
+import Popularity from './components/Popularity';
 import {BrowserRouter as Router, Route, Link, Routes} from 'react-router-dom';
 import {
   ApolloClient,
@@ -43,6 +44,9 @@ function App() {
             <Link className='showlink' to='/my-posts'>
               my posts
             </Link>
+            <Link className='showlink' to='/popularity'>
+              popularity
+            </Link>
           </div>
           <div className='App-body'>
             <Routes>
@@ -50,6 +54,7 @@ function App() {
               <Route path='/my-bin' element={< BinnedImages />} />
               <Route path='/my-posts' element={< MyPost />} />
               <Route path='/new-post' element={< UploadImage />} />
+              <Route path='/popularity' element={< Popularity />} />
             </Routes>
           </div>
         </div>
