@@ -72,14 +72,15 @@ const resolvers = {
                     posterName: x.user.name,
                     description: x.description ? x.description : `No Description`,
                     userPosted: false,
-                    binned: bool
+                    binned: bool,
+                    // numBinned: x.likes
                 }
             })
             // console.log(images);            
             return images
         },
         binnedImages: async () => {
-            const binList = await redisClient.lRange("myBinList", 0, 19)
+            const binList = await redisClient.lRange("myBinList", 0, 500)
             let binnedImages = []
             for (i in binList){
                 let image = await redisClient.hGet("myBin", binList[i])
@@ -88,7 +89,7 @@ const resolvers = {
             return binnedImages
         },
         userPostedImages: async () => {
-            const userPostedImagesList = await redisClient.lRange("listUserPostedImages", 0, 19)
+            const userPostedImagesList = await redisClient.lRange("listUserPostedImages", 0, 500)
             if(!userPostedImagesList){
                 return []
             }
@@ -99,6 +100,21 @@ const resolvers = {
             }
             return usersImages
         }
+        // getTopTenBinnedPosts: async () => {
+        //     const binList = await redisClient.lRange("myBinList", 0, 500)
+        //     if (binList) {
+        //         const topBinnedImages = []
+        //         JSON.parse(binList).forEach(async x => {
+        //             console.log(x);
+        //             let mydata = JSON.stringify(x)
+        //             await redisClient.zAdd("topTenBinnedImages", {
+        //                 score: x.numBinned,
+        //                 value: mydata,
+        //             }); 
+        //         })
+                
+        //     }
+        // }
     },
     Mutation: {
         uploadImage: async (_, args) => {
@@ -113,7 +129,8 @@ const resolvers = {
                     posterName: posterName,
                     description: description,
                     userPosted: true,
-                    binned: false
+                    binned: false,
+                    // numBinned: 0
                 }
                 await redisClient.hSet("userPostedImages", id, JSON.stringify(newImage))
                 await redisClient.lPush("listUserPostedImages", id)   
@@ -133,7 +150,8 @@ const resolvers = {
                         posterName: args.posterName,
                         description: args.description,
                         userPosted: args.userPosted,
-                        binned: false
+                        binned: false,
+                        // numBinned: args.numBinned
                     }
                     await redisClient.hDel("myBin", args.id)
                     await redisClient.lRem("myBinList", 0, args.id)
@@ -148,7 +166,8 @@ const resolvers = {
                         posterName: args.posterName,
                         description: args.description,
                         userPosted: args.userPosted,
-                        binned: true
+                        binned: true,
+                        // numBinned: args.numBinned
                     }
                     await redisClient.hSet("myBin", args.id, JSON.stringify(updatedImage))
                     await redisClient.lPush("myBinList", args.id)

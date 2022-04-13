@@ -165,10 +165,16 @@ const ImageList = (props) => {
             return imageGrid(x)
         })
     } else if (props.data.binnedImages) {
+        if(props.data.binnedImages.length == 0) {
+            return <div>Please Bin some images to see them here.</div>
+        }
         card = props.data.binnedImages.map( x => {
             return imageGrid(x)
         })
     } else if(props.data.userPostedImages){
+        if(props.data.userPostedImages.length == 0) {
+            return <div>Please post some images to see them here.</div>
+        }
         card = props.data.userPostedImages.map( x => {
             return myImageGrid(x)
         })
