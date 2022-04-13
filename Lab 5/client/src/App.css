@@ -1,0 +1,123 @@
+.App {
+  text-align: center;
+  background-color: #C4C4C4;
+  height: auto;
+}
+
+.App-logo {
+  height: 3.5rem;
+  pointer-events: none;
+}
+
+.App-header {
+  background-color: #282c34;
+  height: 150px;
+  width: auto;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  padding-left: 2rem;
+  font-size: 68px;
+  color: white;
+  column-gap: 0.5rem;
+}
+
+.App-body{
+  background-color: #C4C4C4;
+  margin-top: 3rem;
+  width: auto;
+  max-width: 1400px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#showMoreBtn{
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  color: #005298;
+}
+
+#showMoreBtn:hover{
+  cursor: pointer !important;
+}
+
+.navbar{
+  display: flex;
+  flex-direction: initial;
+  align-items: center;
+  justify-content: center;
+  column-gap: 1rem;
+  height: 48px;
+  color: #000000;
+  font-size: 32px;
+}
+
+.showlink{
+  text-decoration: none !important;
+  padding: 0.3rem;
+  border: none;
+  color: #000000;
+}
+
+.showlink:hover{
+  text-decoration: underline !important;
+  color: #0000fc;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+.uploadForm{  
+  display: flex;
+  justify-content: center;
+  max-width: 960px !important;
+  max-height: 1278px !important;
+  width: auto !important;
+  height: auto !important;
+  margin-left: auto;
+  margin-right: auto;
+  border-radius: 5px;
+  background-color: #F7F7F7;
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+.formFields {
+  margin-bottom: 1rem !important;
+  color: #727272 !important;
+  width: 10rem;
+}
+
+#uploadBtn {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.submitBtn{
+  margin-top: 1rem !important;
+  width: 10rem;
+  height: 3rem;
+  color: #0072d0 !important;
+}
+
+.uploadFormDiv{
+  display: flex;
+  width: auto;
+  height: auto;
+  margin: auto;
+}
+
+.formTitle{
+  text-decoration: underline;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
